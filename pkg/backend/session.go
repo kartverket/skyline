@@ -5,7 +5,6 @@ import (
 	"github.com/emersion/go-smtp"
 	"github.com/kartverket/skyline/pkg/email"
 	"github.com/kartverket/skyline/pkg/sender"
-	"github.com/pkg/errors"
 	"io"
 	"log/slog"
 )
@@ -66,13 +65,12 @@ func (s *Session) Data(r io.Reader) error {
 	if err != nil {
 		s.log.Warn("could not send email", "error", err)
 		emailsFailed.Inc()
-	} else {
-		s.log.Info("email sent OK")
-		emailsSucceeded.Inc()
+		return err
 	}
 
-	//return nil
-	return errors.New("evenh tests")
+	s.log.Info("email sent OK")
+	emailsSucceeded.Inc()
+	return nil
 }
 
 func (s *Session) Reset() {

@@ -20,7 +20,7 @@ type Backend struct {
 
 func NewBackend(username string, password string) *Backend {
 	// TODO: Add config and dummy sender
-	s, err := sender.NewOffice365Sender("", "", "")
+	s, err := sender.NewOffice365Sender("", "", "", "")
 	if err != nil {
 		slog.Error("could not construct sender", "error", err)
 		os.Exit(1)
