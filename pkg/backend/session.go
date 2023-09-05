@@ -9,6 +9,7 @@ import (
 	"log/slog"
 )
 
+// TODO: Support disabling of username/password
 // A Session is returned after EHLO.
 type Session struct {
 	auth                bool
@@ -19,7 +20,7 @@ type Session struct {
 }
 
 func (s *Session) AuthPlain(username, password string) error {
-	if username != "username" || password != "password" {
+	if !s.validateCredentials(username, password) {
 		authenticationFailures.Inc()
 		s.log.Debug("Session authentication failed")
 		return smtp.ErrAuthFailed
