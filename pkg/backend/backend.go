@@ -54,10 +54,10 @@ func createSender(cfg *config.SkylineConfig) *sender.Sender {
 	switch cfg.SenderType {
 	case config.MsGraph:
 		s, err := sender.NewOffice365Sender(
-			"",
-			"",
-			"",
-			"",
+			cfg.MsGraphConfig.TenantId,
+			cfg.MsGraphConfig.ClientId,
+			cfg.MsGraphConfig.ClientSecret,
+			cfg.MsGraphConfig.SenderUserId,
 		)
 		if err != nil {
 			slog.Error("could not construct sender", "error", err)

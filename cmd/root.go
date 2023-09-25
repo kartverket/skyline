@@ -30,13 +30,11 @@ func init() {
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
 	// Find home directory.
-	home, err := os.UserHomeDir()
+	home, err := os.Getwd()
 	cobra.CheckErr(err)
-
 	viper.AddConfigPath(home)
 	viper.SetConfigType("yaml")
 	viper.SetConfigName(".skyline")
-
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.SetEnvPrefix("SL")
 	viper.AutomaticEnv() // read in environment variables that match

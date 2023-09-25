@@ -69,43 +69,23 @@ func init() {
 }
 
 func constructConfig() *config.SkylineConfig {
-	var enumSenderType config.SenderType
+	var cfg config.SkylineConfig
+	_ = viper.Unmarshal(&cfg)
 
-	switch t := viper.GetString("sender-type"); t {
-	case "msGraph":
-		enumSenderType = config.MsGraph
-	case "dummy":
-		enumSenderType = config.Dummy
+	switch t := cfg.SenderType; t {
+	case config.MsGraph:
+	case config.Dummy:
 	default:
 		slog.Error("unknown sender type", "type", t)
 		os.Exit(1)
 	}
 
-	cfg := &config.SkylineConfig{
-		Hostname:    hostname,
-		Port:        port,
-		MetricsPort: metricsPort,
-		Debug:       debug,
-		SenderType:  enumSenderType,
-		BasicAuthConfig: &config.BasicAuthConfig{
-			Enabled:  baEnabled,
-			Username: baUsername,
-			Password: baPassword,
-		},
-	}
-
-	if enumSenderType == config.MsGraph {
-		if util.AnyEmpty(msGraphTenantId, msGraphClientId, msGraphClientSecret, msGraphSenderUserId) {
+	if cfg.SenderType == config.MsGraph {
+		if cfg.MsGraphConfig == nil || util.AnyEmpty(cfg.MsGraphConfig.ClientId, cfg.MsGraphConfig.TenantId, cfg.MsGraphConfig.SenderUserId, cfg.MsGraphConfig.ClientSecret) {
 			slog.Error("sender is configured as MsGraph but some of the required configuration properties is empty")
 			os.Exit(1)
 		}
-
-		cfg.MsGraphConfig = &config.MsGraphConfig{
-			TenantId:     msGraphTenantId,
-			ClientId:     msGraphClientId,
-			ClientSecret: msGraphClientSecret,
-			SenderUserId: msGraphSenderUserId,
-		}
 	}
-	return cfg
+
+	return &cfg
 }
