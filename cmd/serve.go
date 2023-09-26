@@ -11,23 +11,6 @@ import (
 	"os"
 )
 
-var (
-	port        uint
-	metricsPort uint
-	hostname    string
-	debug       bool
-	senderType  string
-
-	msGraphTenantId     string
-	msGraphClientId     string
-	msGraphClientSecret string
-	msGraphSenderUserId string
-
-	baEnabled  bool
-	baUsername string
-	baPassword string
-)
-
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Start the SMTP server",
@@ -47,36 +30,41 @@ func init() {
 
 	rootCmd.AddCommand(serveCmd)
 
-	serveCmd.Flags().UintVarP(&port, "port", "p", 5252, "The SMTP port to bind to")
-	serveCmd.Flags().UintVarP(&metricsPort, "metrics-port", "m", 5353, "The port to serve metrics at")
-	serveCmd.Flags().StringVar(&hostname, "hostname", h, "The SMTP hostname")
-	serveCmd.Flags().BoolVar(&debug, "debug", false, "Whether to enable debug logging")
+	serveCmd.Flags().IntP("port", "p", 5252, "The SMTP port to bind to")
+	serveCmd.Flags().IntP("metrics-port", "m", 5353, "The port to serve metrics at")
+	serveCmd.Flags().String("hostname", h, "The SMTP hostname")
+	serveCmd.Flags().Bool("debug", false, "Whether to enable debug logging")
 
-	serveCmd.Flags().StringVar(&senderType, "sender-type", "msGraph", "Which underlying sending mechanism to use. Permitted values are 'msGraph' and 'dummy'")
-	serveCmd.Flags().StringVar(&msGraphTenantId, "ms-tenant-id", "", "MS Graph API Tenant ID")
-	serveCmd.Flags().StringVar(&msGraphClientId, "ms-client-id", "", "MS Graph API Client ID")
-	serveCmd.Flags().StringVar(&msGraphClientSecret, "ms-client-secret", "", "MS Graph API Client Secret")
-	serveCmd.Flags().StringVar(&msGraphSenderUserId, "ms-sender-id", "", "MS Graph API Object Id for Azure AD email sender")
+	serveCmd.Flags().String("sender-type", "msGraph", "Which underlying sending mechanism to use. Permitted values are 'msGraph' and 'dummy'")
+	serveCmd.Flags().String("ms-tenant-id", "", "MS Graph API Tenant ID")
+	serveCmd.Flags().String("ms-client-id", "", "MS Graph API Client ID")
+	serveCmd.Flags().String("ms-client-secret", "", "MS Graph API Client Secret")
+	serveCmd.Flags().String("ms-sender-id", "", "MS Graph API Object Id for Azure AD email sender")
 
-	serveCmd.Flags().BoolVar(&baEnabled, "auth-enabled", true, "Whether basic auth is enabled")
-	serveCmd.Flags().StringVar(&baUsername, "auth-username", "username", "Basic Auth username")
-	serveCmd.Flags().StringVar(&baPassword, "auth-password", "password", "Basic Auth password")
+	serveCmd.Flags().Bool("auth-enabled", true, "Whether basic auth is enabled")
+	serveCmd.Flags().String("auth-username", "username", "Basic Auth username")
+	serveCmd.Flags().String("auth-password", "password", "Basic Auth password")
 
 	if err := viper.BindPFlags(serveCmd.Flags()); err != nil {
 		slog.Error("could not bind cmd flags to viper config", "error", err)
 		os.Exit(1)
 	}
+	_ = viper.BindPFlag("ms-graph-config.tenant-id", serveCmd.Flags().Lookup("ms-tenant-id"))
+	_ = viper.BindPFlag("ms-graph-config.client-id", serveCmd.Flags().Lookup("ms-client-id"))
+	_ = viper.BindPFlag("ms-graph-config.client-secret", serveCmd.Flags().Lookup("ms-client-secret"))
+	_ = viper.BindPFlag("ms-graph-config.sender-user-id", serveCmd.Flags().Lookup("ms-sender-id"))
+
+	_ = viper.BindPFlag("basic-auth-config.enabled", serveCmd.Flags().Lookup("auth-enabled"))
+	_ = viper.BindPFlag("basic-auth-config.username", serveCmd.Flags().Lookup("username"))
+	_ = viper.BindPFlag("basic-auth-config.password", serveCmd.Flags().Lookup("password"))
 }
 
 func constructConfig() *config.SkylineConfig {
 	var cfg config.SkylineConfig
 	_ = viper.Unmarshal(&cfg)
 
-	switch t := cfg.SenderType; t {
-	case config.MsGraph:
-	case config.Dummy:
-	default:
-		slog.Error("unknown sender type", "type", t)
+	if !cfg.SenderType.IsValid() {
+		slog.Error("unknown sender type", "type", cfg.SenderType)
 		os.Exit(1)
 	}
 

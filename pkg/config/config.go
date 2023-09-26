@@ -7,6 +7,14 @@ const (
 	Dummy
 )
 
+func (s SenderType) IsValid() bool {
+	switch s {
+	case MsGraph, Dummy:
+		return true
+	}
+	return false
+}
+
 type BasicAuthConfig struct {
 	Enabled  bool   `mapstructure:"enabled"`
 	Username string `mapstructure:"username"`
@@ -14,11 +22,11 @@ type BasicAuthConfig struct {
 }
 
 type MsGraphConfig struct {
-	TenantId     string `mapstructure:"ms-tenant-id"`
-	ClientId     string `mapstructure:"ms-client-id"`
-	ClientSecret string `mapstructure:"ms-client-secret"`
+	TenantId     string `mapstructure:"tenant-id"`
+	ClientId     string `mapstructure:"client-id"`
+	ClientSecret string `mapstructure:"client-secret"`
 	// The object ID of the user in Azure AD. Will send using that's user email.
-	SenderUserId string `mapstructure:"ms-sender-user-id"`
+	SenderUserId string `mapstructure:"sender-user-id"`
 }
 
 type SkylineConfig struct {
