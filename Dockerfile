@@ -10,7 +10,7 @@ RUN CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -tags timetzdata
 FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /build/skyline ./
-COPY --from=0 /etc/passwd /etc/passwd
+COPY --from=builder /etc/passwd /etc/passwd
 USER scratchuser
 
 ENTRYPOINT ["/skyline", "serve"]
