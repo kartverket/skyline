@@ -16,7 +16,7 @@ builds:
 dockers:
   - dockerfile: 'Dockerfile'
     image_templates:
-      - "ghrc.io/kartverket/{{ .ProjectName }}:{{ .Version }}"
+      - "ghcr.io/kartverket/{{ .ProjectName }}:{{ .Version }}"
 
 
 archives:
