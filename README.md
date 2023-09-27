@@ -12,8 +12,8 @@ go run . serve [--flag value]
 ### Env variables
 If used as environment variable it must be prefixed with SL_, and be in all caps. Use _ instead of -.
 
-For yaml: 
-```
+Config file structure. The default location is `$HOME/.skyline.yaml`
+```yaml
 hostname: testname
 port: 30333
 metrics-port: 32111
