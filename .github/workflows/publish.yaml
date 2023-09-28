@@ -51,4 +51,4 @@ jobs:
       - name: "Run Pharos"
         uses: kartverket/pharos@v0.1.0
         with:
-          image_url: ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{ steps.meta.outputs.tags }}
+          image_url: ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{  github.ref_name }}
