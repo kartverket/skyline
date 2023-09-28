@@ -41,6 +41,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   pharos-job:
     name: Run Pharos with Required Permissions
+    needs: build-and-push-image
     permissions:
       actions: read
       packages: read
@@ -51,4 +52,4 @@ jobs:
       - name: "Run Pharos"
         uses: kartverket/pharos@v0.1.0
         with:
-          image_url: ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{ steps.meta.outputs.tags }}
+          image_url: ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{  github.ref_name }}
