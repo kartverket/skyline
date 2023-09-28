@@ -5,7 +5,7 @@ import (
 	"github.com/emersion/go-smtp"
 	"github.com/google/uuid"
 	"github.com/kartverket/skyline/pkg/config"
-	"github.com/kartverket/skyline/pkg/sender"
+	skysender "github.com/kartverket/skyline/pkg/sender"
 	"log/slog"
 	"os"
 )
@@ -14,7 +14,7 @@ import (
 // TODO: Configurable credentials
 // TODO: Pluggable providers
 type Backend struct {
-	sender    *sender.Sender
+	sender    *skysender.Sender
 	basicAuth *config.BasicAuthConfig
 }
 
@@ -48,12 +48,12 @@ func (b *Backend) checkCredentials(username string, password string) bool {
 	return username == b.basicAuth.Username && password == b.basicAuth.Password
 }
 
-func createSender(cfg *config.SkylineConfig) *sender.Sender {
-	var configuredSender sender.Sender
+func createSender(cfg *config.SkylineConfig) *skysender.Sender {
+	var configuredSender skysender.Sender
 
 	switch cfg.SenderType {
 	case config.MsGraph:
-		s, err := sender.NewOffice365Sender(
+		sender, err := skysender.NewOffice365Sender(
 			cfg.MsGraphConfig.TenantId,
 			cfg.MsGraphConfig.ClientId,
 			cfg.MsGraphConfig.ClientSecret,
@@ -63,7 +63,7 @@ func createSender(cfg *config.SkylineConfig) *sender.Sender {
 			slog.Error("could not construct sender", "error", err)
 			os.Exit(1)
 		}
-		configuredSender = s
+		configuredSender = sender
 	case config.Dummy:
 		slog.Warn("not implemented yet, exiting cleanly")
 		os.Exit(0)

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/emersion/go-smtp"
-	"github.com/kartverket/skyline/pkg/backend"
+	skybackend "github.com/kartverket/skyline/pkg/backend"
 	"github.com/kartverket/skyline/pkg/config"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
@@ -21,24 +21,24 @@ type SkylineServer struct {
 }
 
 func NewServer(ctx context.Context, cfg *config.SkylineConfig) *SkylineServer {
-	be := backend.NewBackend(cfg)
+	backend := skybackend.NewBackend(cfg)
 
-	s := smtp.NewServer(be)
+	server := smtp.NewServer(backend)
 
-	s.Addr = fmt.Sprintf(":%d", cfg.Port)
-	s.Domain = cfg.Hostname
-	s.ReadTimeout = 10 * time.Second
-	s.WriteTimeout = 10 * time.Second
-	s.MaxMessageBytes = 1024 * 1024
-	s.MaxRecipients = 50
-	s.AllowInsecureAuth = true
-	s.ErrorLog = log.Default()
+	server.Addr = fmt.Sprintf(":%d", cfg.Port)
+	server.Domain = cfg.Hostname
+	server.ReadTimeout = 10 * time.Second
+	server.WriteTimeout = 10 * time.Second
+	server.MaxMessageBytes = 1024 * 1024
+	server.MaxRecipients = 50
+	server.AllowInsecureAuth = true
+	server.ErrorLog = log.Default()
 	if cfg.Debug {
-		s.Debug = os.Stdout
+		server.Debug = os.Stdout
 	}
 
 	return &SkylineServer{
-		smtp:    s,
+		smtp:    server,
 		ctx:     ctx,
 		metrics: metricsServer(cfg.MetricsPort),
 	}
