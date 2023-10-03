@@ -35,7 +35,7 @@ func initConfig() {
 	viper.AddConfigPath(home)
 	viper.SetConfigType("yaml")
 	viper.SetConfigName(".skyline")
-	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
 	viper.SetEnvPrefix("SL")
 	viper.AutomaticEnv() // read in environment variables that match
 	// If a config file is found, read it in.
