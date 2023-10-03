@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"log/slog"
 	"os"
 	"strings"
 
@@ -9,11 +9,13 @@ import (
 	"github.com/spf13/viper"
 )
 
+var debug bool
 var rootCmd = &cobra.Command{
 	Use:   "skyline",
 	Short: "Secure SMTP on the horizon",
 	Long: `Skyline bridges the need for a classic SMTP server and the security measures found
 in modern cloud providers.`,
+	PersistentPreRun: toggleDebug,
 }
 
 func Execute() {
@@ -23,7 +25,19 @@ func Execute() {
 	}
 }
 
+func toggleDebug(cmd *cobra.Command, args []string) {
+	logLevel := &slog.LevelVar{}
+
+	if debug {
+		logLevel.Set(slog.LevelDebug)
+		slog.Debug("Debug logs enabled")
+	} else {
+		logLevel.Set(slog.LevelInfo)
+	}
+}
+
 func init() {
+	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "verbose logging")
 	cobra.OnInitialize(initConfig)
 }
 
@@ -38,10 +52,11 @@ func initConfig() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
 	viper.SetEnvPrefix("SL")
 	viper.AutomaticEnv() // read in environment variables that match
+
 	// If a config file is found, read it in.
-	fmt.Fprintln(os.Stdout, "Looking to dir for config:", home)
+	slog.Info("Looking for config", slog.String("directory", home))
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		slog.Info("Using config file:", slog.String("file", viper.ConfigFileUsed()))
 	}
 }

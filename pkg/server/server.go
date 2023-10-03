@@ -33,9 +33,8 @@ func NewServer(ctx context.Context, cfg *config.SkylineConfig) *SkylineServer {
 	server.MaxRecipients = 50
 	server.AllowInsecureAuth = true
 	server.ErrorLog = log.Default()
-	if cfg.Debug {
-		server.Debug = os.Stdout
-	}
+	//TODO make adapter, or something
+	server.Debug = os.Stdout
 
 	return &SkylineServer{
 		smtp:    server,

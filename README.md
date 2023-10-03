@@ -18,7 +18,6 @@ hostname: testname
 port: 30333
 metrics-port: 32111
 sender-type: msGraph
-debug: true
 ms-graph-config:
   tenant-id: 
   client-id: 
@@ -27,7 +26,7 @@ ms-graph-config:
 basic-auth-config:
   enabled: true 
   username:
-  password
+  password:
 ```
 
 The same variables can be used as flags, ie: `./skyline serve --port 123`

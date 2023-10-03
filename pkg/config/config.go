@@ -33,7 +33,6 @@ type SkylineConfig struct {
 	Hostname        string           `mapstructure:"hostname"`
 	Port            uint             `mapstructure:"port"`
 	MetricsPort     uint             `mapstructure:"metrics-port"`
-	Debug           bool             `mapstructure:"debug"`
 	SenderType      SenderType       `mapstructure:"sender-type"`
 	MsGraphConfig   *MsGraphConfig   `mapstructure:"ms-graph-config"`
 	BasicAuthConfig *BasicAuthConfig `mapstructure:"basic-auth-config"`

@@ -33,7 +33,6 @@ func init() {
 	serveCmd.Flags().IntP("port", "p", 5252, "The SMTP port to bind to")
 	serveCmd.Flags().IntP("metrics-port", "m", 5353, "The port to serve metrics at")
 	serveCmd.Flags().String("hostname", h, "The SMTP hostname")
-	serveCmd.Flags().Bool("debug", false, "Whether to enable debug logging")
 
 	serveCmd.Flags().String("sender-type", "msGraph", "Which underlying sending mechanism to use. Permitted values are 'msGraph' and 'dummy'")
 	serveCmd.Flags().String("ms-tenant-id", "", "MS Graph API Tenant ID")
