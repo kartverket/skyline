@@ -4,7 +4,8 @@ import (
 	"context"
 	"github.com/emersion/go-smtp"
 	"github.com/google/uuid"
-	"github.com/kartverket/skyline/pkg/sender"
+	"github.com/kartverket/skyline/pkg/config"
+	skysender "github.com/kartverket/skyline/pkg/sender"
 	"log/slog"
 	"os"
 )
@@ -13,23 +14,14 @@ import (
 // TODO: Configurable credentials
 // TODO: Pluggable providers
 type Backend struct {
-	sender   *sender.Sender
-	username string
-	password string
+	sender    *skysender.Sender
+	basicAuth *config.BasicAuthConfig
 }
 
-func NewBackend(username string, password string) *Backend {
-	// TODO: Add config and dummy sender
-	s, err := sender.NewOffice365Sender("", "", "", "")
-	if err != nil {
-		slog.Error("could not construct sender", "error", err)
-		os.Exit(1)
-	}
-
+func NewBackend(cfg *config.SkylineConfig) *Backend {
 	return &Backend{
-		sender:   &s,
-		username: username,
-		password: password,
+		sender:    createSender(cfg),
+		basicAuth: cfg.BasicAuthConfig,
 	}
 }
 
@@ -48,5 +40,37 @@ func (b *Backend) NewSession(_ *smtp.Conn) (smtp.Session, error) {
 }
 
 func (b *Backend) checkCredentials(username string, password string) bool {
-	return username == b.username && password == b.password
+	if !b.basicAuth.Enabled {
+		slog.Warn("basic auth disabled, but validation called anyway")
+		return true
+	}
+
+	return username == b.basicAuth.Username && password == b.basicAuth.Password
+}
+
+func createSender(cfg *config.SkylineConfig) *skysender.Sender {
+	var configuredSender skysender.Sender
+
+	switch cfg.SenderType {
+	case config.MsGraph:
+		sender, err := skysender.NewOffice365Sender(
+			cfg.MsGraphConfig.TenantId,
+			cfg.MsGraphConfig.ClientId,
+			cfg.MsGraphConfig.ClientSecret,
+			cfg.MsGraphConfig.SenderUserId,
+		)
+		if err != nil {
+			slog.Error("could not construct sender", "error", err)
+			os.Exit(1)
+		}
+		configuredSender = sender
+	case config.Dummy:
+		slog.Warn("not implemented yet, exiting cleanly")
+		os.Exit(0)
+	default:
+		slog.Error("unknown sender type", "type", cfg.SenderType)
+		os.Exit(1)
+	}
+
+	return &configuredSender
 }

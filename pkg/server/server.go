@@ -4,12 +4,17 @@ import (
 	"context"
 	"fmt"
 	"github.com/emersion/go-smtp"
-	"github.com/kartverket/skyline/pkg/backend"
+	skybackend "github.com/kartverket/skyline/pkg/backend"
+	"github.com/kartverket/skyline/pkg/config"
+	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"log/slog"
 	"net/http"
 	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 	"time"
 )
 
@@ -19,27 +24,38 @@ type SkylineServer struct {
 	metrics *http.Server
 }
 
-func NewServer(ctx context.Context, port uint, metricsPort uint, hostname string, debug bool) *SkylineServer {
-	be := backend.NewBackend("username", "password")
+var (
+	ctx         context.Context
+	stop        context.CancelFunc
+	gracePeriod = 30 * time.Second
+)
 
-	s := smtp.NewServer(be)
+func init() {
+	ctx, stop = signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)
+}
 
-	s.Addr = fmt.Sprintf(":%d", port)
-	s.Domain = hostname
-	s.ReadTimeout = 10 * time.Second
-	s.WriteTimeout = 10 * time.Second
-	s.MaxMessageBytes = 1024 * 1024
-	s.MaxRecipients = 50
-	s.AllowInsecureAuth = true
-	s.ErrorLog = log.Default()
-	if debug {
-		s.Debug = os.Stdout
+func NewServer(cfg *config.SkylineConfig) *SkylineServer {
+	backend := skybackend.NewBackend(cfg)
+
+	server := smtp.NewServer(backend)
+
+	server.Addr = fmt.Sprintf(":%d", cfg.Port)
+	server.Domain = cfg.Hostname
+	server.ReadTimeout = 10 * time.Second
+	server.WriteTimeout = 10 * time.Second
+	server.MaxMessageBytes = 1024 * 1024
+	server.MaxRecipients = 50
+	server.AllowInsecureAuth = true
+	server.ErrorLog = log.Default()
+	//TODO make adapter, or something
+	if cfg.Debug {
+		server.Debug = os.Stdout
 	}
 
 	return &SkylineServer{
-		smtp:    s,
+		smtp:    server,
 		ctx:     ctx,
-		metrics: metricsServer(metricsPort),
+		metrics: metricsServer(cfg.MetricsPort),
 	}
 }
 
@@ -54,8 +70,7 @@ func metricsServer(metricsPort uint) *http.Server {
 }
 
 func (s *SkylineServer) Serve() {
-	// TODO: Use context
-	// TODO: Ctrl+C / signal handler
+	defer stop()
 
 	go func() {
 		slog.Info("Starting SkylineServer at " + s.smtp.Addr)
@@ -67,7 +82,7 @@ func (s *SkylineServer) Serve() {
 
 	go func() {
 		slog.Info("Serving metrics at " + s.metrics.Addr)
-		if err := s.metrics.ListenAndServe(); err != nil {
+		if err := s.metrics.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			slog.Error("could not start metrics server", "error", err)
 			os.Exit(1)
 		}
@@ -75,11 +90,15 @@ func (s *SkylineServer) Serve() {
 
 	select {
 	case <-s.ctx.Done():
-		shutdownCtx, _ := context.WithDeadline(context.Background(), time.Now().Add(30*time.Second))
+		shutdownCtx, _ := context.WithDeadline(context.Background(), time.Now().Add(gracePeriod))
+		var wg sync.WaitGroup
 
-		slog.Info("shutting down")
+		slog.Info("received interrupt, shutting down with a grace period", "duration", gracePeriod)
+		wg.Add(2)
 
 		go func() {
+			defer wg.Done()
+			slog.Info("shutting down SMTP server")
 			err := s.smtp.Shutdown(shutdownCtx)
 			if err != nil {
 				slog.Warn("could not shut down SMTP server", "error", err)
@@ -87,10 +106,15 @@ func (s *SkylineServer) Serve() {
 		}()
 
 		go func() {
+			defer wg.Done()
+			slog.Info("shutting down metrics server")
 			err := s.metrics.Shutdown(shutdownCtx)
 			if err != nil {
 				slog.Warn("could not shut down metrics server", "error", err)
 			}
 		}()
+
+		wg.Wait()
+		slog.Info("shutdown complete")
 	}
 }
