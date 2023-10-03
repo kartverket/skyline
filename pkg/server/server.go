@@ -48,7 +48,9 @@ func NewServer(cfg *config.SkylineConfig) *SkylineServer {
 	server.AllowInsecureAuth = true
 	server.ErrorLog = log.Default()
 	//TODO make adapter, or something
-	server.Debug = os.Stdout
+	if cfg.Debug {
+		server.Debug = os.Stdout
+	}
 
 	return &SkylineServer{
 		smtp:    server,

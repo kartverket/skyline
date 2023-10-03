@@ -39,6 +39,11 @@ func toggleDebug(cmd *cobra.Command, args []string) {
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "verbose logging")
 	cobra.OnInitialize(initConfig)
+
+	if err := viper.BindPFlags(rootCmd.PersistentFlags()); err != nil {
+		slog.Error("could not bind root persistent flags to viper config", "error", err)
+		os.Exit(1)
+	}
 }
 
 // initConfig reads in config file and ENV variables if set.
