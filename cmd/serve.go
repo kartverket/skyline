@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"github.com/kartverket/skyline/pkg/config"
 	"github.com/kartverket/skyline/pkg/server"
 	"github.com/kartverket/skyline/pkg/util"
@@ -15,8 +14,7 @@ var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Start the SMTP server",
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx := context.Background()
-		s := server.NewServer(ctx, constructConfig())
+		s := server.NewServer(constructConfig())
 		s.Serve()
 	},
 }
