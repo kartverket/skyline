@@ -6,4 +6,4 @@ COPY skyline /
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 USER scratchuser
-CMD ["./skyline", "serve"]
+ENTRYPOINT ["./skyline", "serve"]
