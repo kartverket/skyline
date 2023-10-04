@@ -6,13 +6,16 @@ import (
 	"github.com/emersion/go-smtp"
 	skybackend "github.com/kartverket/skyline/pkg/backend"
 	"github.com/kartverket/skyline/pkg/config"
+	logutils "github.com/kartverket/skyline/pkg/util/log"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"io"
 	"log"
 	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -47,9 +50,9 @@ func NewServer(cfg *config.SkylineConfig) *SkylineServer {
 	server.MaxRecipients = 50
 	server.AllowInsecureAuth = true
 	server.ErrorLog = log.Default()
-	//TODO make adapter, or something
+
 	if cfg.Debug {
-		server.Debug = os.Stdout
+		server.Debug = smtpSlogAdapter(ctx)
 	}
 
 	return &SkylineServer{
@@ -117,4 +120,15 @@ func (s *SkylineServer) Serve() {
 		wg.Wait()
 		slog.Info("shutdown complete")
 	}
+}
+
+func smtpSlogAdapter(ctx context.Context) io.Writer {
+	return logutils.NewSlogWriter(
+		ctx,
+		slog.LevelDebug,
+		map[string]string{"protocol": "smtp", "raw": "true"},
+		func(line string) string {
+			return strings.Replace(line, "\r", "", 1)
+		},
+	)
 }
