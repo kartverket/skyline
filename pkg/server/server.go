@@ -10,7 +10,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"io"
-	"log"
 	"log/slog"
 	"net/http"
 	"os"
@@ -49,10 +48,10 @@ func NewServer(cfg *config.SkylineConfig) *SkylineServer {
 	server.MaxMessageBytes = 1024 * 1024
 	server.MaxRecipients = 50
 	server.AllowInsecureAuth = true
-	server.ErrorLog = log.Default()
+	server.ErrorLog = logAdapter(ctx)
 
 	if cfg.Debug {
-		server.Debug = smtpSlogAdapter(ctx)
+		server.Debug = ioWriterAdapter(ctx)
 	}
 
 	return &SkylineServer{
@@ -122,13 +121,21 @@ func (s *SkylineServer) Serve() {
 	}
 }
 
-func smtpSlogAdapter(ctx context.Context) io.Writer {
+func ioWriterAdapter(ctx context.Context) io.Writer {
 	return logutils.NewSlogWriter(
 		ctx,
 		slog.LevelDebug,
-		map[string]string{"protocol": "smtp", "raw": "true"},
+		map[string]string{"component": "smtp", "raw": "true"},
 		func(line string) string {
 			return strings.Replace(line, "\r", "", 1)
 		},
+	)
+}
+
+func logAdapter(ctx context.Context) smtp.Logger {
+	return logutils.NewLogAdapter(
+		ctx,
+		slog.LevelError,
+		map[string]string{"component": "smtp"},
 	)
 }
