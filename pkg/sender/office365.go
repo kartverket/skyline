@@ -87,7 +87,6 @@ func mapToGraphMail(email *email.SkylineEmail) (*graphusers.ItemSendMailPostRequ
 	saveToSentItems := false
 	requestBody.SetSaveToSentItems(&saveToSentItems)
 
-	// TODO: Correct
 	return requestBody, nil
 }
 

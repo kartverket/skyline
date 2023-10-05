@@ -9,7 +9,6 @@ import (
 	"log/slog"
 )
 
-// TODO: Support disabling of username/password
 // A Session is returned after EHLO.
 type Session struct {
 	auth                bool
@@ -75,8 +74,10 @@ func (s *Session) Data(r io.Reader) error {
 }
 
 func (s *Session) Reset() {
+	s.log.Debug("reset invoked")
 }
 
 func (s *Session) Logout() error {
+	s.log.Debug("logout invoked")
 	return nil
 }

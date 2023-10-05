@@ -6,13 +6,15 @@ import (
 	"github.com/emersion/go-smtp"
 	skybackend "github.com/kartverket/skyline/pkg/backend"
 	"github.com/kartverket/skyline/pkg/config"
+	logutils "github.com/kartverket/skyline/pkg/util/log"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"log"
+	"io"
 	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -46,10 +48,10 @@ func NewServer(cfg *config.SkylineConfig) *SkylineServer {
 	server.MaxMessageBytes = 1024 * 1024
 	server.MaxRecipients = 50
 	server.AllowInsecureAuth = true
-	server.ErrorLog = log.Default()
-	//TODO make adapter, or something
+	server.ErrorLog = logAdapter(ctx)
+
 	if cfg.Debug {
-		server.Debug = os.Stdout
+		server.Debug = ioWriterAdapter(ctx)
 	}
 
 	return &SkylineServer{
@@ -117,4 +119,23 @@ func (s *SkylineServer) Serve() {
 		wg.Wait()
 		slog.Info("shutdown complete")
 	}
+}
+
+func ioWriterAdapter(ctx context.Context) io.Writer {
+	return logutils.NewSlogWriter(
+		ctx,
+		slog.LevelDebug,
+		map[string]string{"component": "smtp", "raw": "true"},
+		func(line string) string {
+			return strings.Replace(line, "\r", "", 1)
+		},
+	)
+}
+
+func logAdapter(ctx context.Context) smtp.Logger {
+	return logutils.NewLogAdapter(
+		ctx,
+		slog.LevelError,
+		map[string]string{"component": "smtp"},
+	)
 }

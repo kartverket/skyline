@@ -11,8 +11,6 @@ import (
 )
 
 // The Backend implements SMTP server methods.
-// TODO: Configurable credentials
-// TODO: Pluggable providers
 type Backend struct {
 	sender    *skysender.Sender
 	basicAuth *config.BasicAuthConfig
