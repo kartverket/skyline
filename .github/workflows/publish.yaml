@@ -26,7 +26,7 @@ jobs:
         with:
           go-version: "1.21"
       - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        uses: docker/login-action@b4bedf8053341df3b5a9f9e0f2cf4e79e27360c6
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
