@@ -41,3 +41,4 @@ All configuration properties can be specified as environment variables by replac
 ## Run
 
 Use `go run`, `go build && ./skyline` or use one of the [prebuilt container images](https://github.com/kartverket/skyline/pkgs/container/skyline).
+You can also create your own local image with `goreleaser release --snapshot --clean`

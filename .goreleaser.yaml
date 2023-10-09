@@ -6,8 +6,9 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
-      - darwin
+    goarch:
+      - amd64
+      - arm64
     ldflags:
       - -extldflags "-static"
     tags:
