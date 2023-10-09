@@ -27,7 +27,7 @@ func NewLogAdapter(ctx context.Context, logLevel slog.Level, defaultBaggage map[
 }
 
 func (l *logToSlogAdapter) Printf(format string, v ...interface{}) {
-	slog.Default().LogAttrs(l.ctx, l.logLevel, fmt.Sprintf(format, v), l.defaultBaggage...)
+	slog.Default().LogAttrs(l.ctx, l.logLevel, fmt.Sprintf(format, v...), l.defaultBaggage...)
 }
 
 func (l *logToSlogAdapter) Println(v ...interface{}) {
