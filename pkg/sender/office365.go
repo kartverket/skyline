@@ -43,7 +43,7 @@ func (s *office365sender) Send(ctx context.Context, email *email.SkylineEmail) e
 	}
 
 	err = s.graphClient.Users().
-		ByUserIdString(s.senderUserId).
+		ByUserId(s.senderUserId).
 		SendMail().Post(ctx, payload, nil)
 
 	return unwrapODataError(err)
