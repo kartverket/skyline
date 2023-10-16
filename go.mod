@@ -7,7 +7,7 @@ require (
 	github.com/emersion/go-smtp v0.18.1
 	github.com/google/uuid v1.3.1
 	github.com/microsoftgraph/msgraph-sdk-go v1.21.0
-	github.com/mnako/letters v0.2.1
+	github.com/mnako/letters v0.2.2
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.17.0
 	github.com/spf13/cobra v1.7.0
