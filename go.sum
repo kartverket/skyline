@@ -198,8 +198,8 @@ github.com/microsoftgraph/msgraph-sdk-go-core v1.0.0 h1:7NWTfyXvOjoizW7PmxNp3+8w
 github.com/microsoftgraph/msgraph-sdk-go-core v1.0.0/go.mod h1:tQb4q3YMIj2dWhhXhQSJ4ELpol931ANKzHSYK5kX1qE=
 github.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyuac5Z2hdY=
 github.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
-github.com/mnako/letters v0.2.1 h1:ZGFDSLruG2cbFM0bb1sYnCbBdTj6qAX9UlPO0qkxdIk=
-github.com/mnako/letters v0.2.1/go.mod h1:r1Z7i+QHqscls2Go1y2Q05RmrsNh2uDQz84DiSx7Bc4=
+github.com/mnako/letters v0.2.2 h1:koVahnzazHIq3aQnjVZE5SBJ7ZG/mXK6uSM4Jh70Naw=
+github.com/mnako/letters v0.2.2/go.mod h1:8DKs/xAQ9A7TP8zrLiZPvlrX5synZnvRyTT5Ja+QUK4=
 github.com/pelletier/go-toml/v2 v2.1.0 h1:FnwAJ4oYMvbT/34k9zzHuZNrhlz48GB3/s6at6/MHO4=
 github.com/pelletier/go-toml/v2 v2.1.0/go.mod h1:tJU2Z3ZkXwnxa4DPO899bsyIoywizdUvyaeZurnPPDc=
 github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 h1:KoWmjvw+nsYOo29YJK9vDA65RGE3NrOnUtO7a+RF9HU=
