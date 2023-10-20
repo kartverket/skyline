@@ -52,6 +52,7 @@ func initConfig() {
 	home, err := os.UserHomeDir()
 	cobra.CheckErr(err)
 	viper.AddConfigPath(home)
+	viper.AddConfigPath("/opt/skyline")
 	viper.SetConfigType("yaml")
 	viper.SetConfigName(".skyline")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
@@ -60,6 +61,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	slog.Info("Looking for config", slog.String("directory", home))
+	slog.Info("Looking for config", slog.String("directory", "/opt/skyline"))
 
 	if err := viper.ReadInConfig(); err == nil {
 		slog.Info("Using config file:", slog.String("file", viper.ConfigFileUsed()))
