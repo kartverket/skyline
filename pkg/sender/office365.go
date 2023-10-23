@@ -78,6 +78,10 @@ func mapToGraphMail(email *email.SkylineEmail) (*graphusers.ItemSendMailPostRequ
 		contentType := graphmodels.HTML_BODYTYPE
 		body.SetContentType(&contentType)
 		body.SetContent(&email.HTML)
+	} else if email.IsMultiPartAlternative() {
+		contentType := graphmodels.HTML_BODYTYPE
+		body.SetContentType(&contentType)
+		body.SetContent(&email.HTML)
 	} else {
 		return nil, errors.New("unsupported content type: " + email.Headers.ContentType.ContentType)
 	}

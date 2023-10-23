@@ -52,8 +52,8 @@ func init() {
 	_ = viper.BindPFlag("ms-graph-config.sender-user-id", serveCmd.Flags().Lookup("ms-sender-id"))
 
 	_ = viper.BindPFlag("basic-auth-config.enabled", serveCmd.Flags().Lookup("auth-enabled"))
-	_ = viper.BindPFlag("basic-auth-config.username", serveCmd.Flags().Lookup("username"))
-	_ = viper.BindPFlag("basic-auth-config.password", serveCmd.Flags().Lookup("password"))
+	_ = viper.BindPFlag("basic-auth-config.username", serveCmd.Flags().Lookup("auth-username"))
+	_ = viper.BindPFlag("basic-auth-config.password", serveCmd.Flags().Lookup("auth-password"))
 }
 
 func constructConfig() *config.SkylineConfig {
@@ -64,7 +64,6 @@ func constructConfig() *config.SkylineConfig {
 		slog.Error("unknown sender type", "type", cfg.SenderType)
 		os.Exit(1)
 	}
-
 	if cfg.SenderType == config.MsGraph {
 		if cfg.MsGraphConfig == nil || util.AnyEmpty(cfg.MsGraphConfig.ClientId, cfg.MsGraphConfig.TenantId, cfg.MsGraphConfig.SenderUserId, cfg.MsGraphConfig.ClientSecret) {
 			slog.Error("sender is configured as MsGraph but some of the required configuration properties is empty")
