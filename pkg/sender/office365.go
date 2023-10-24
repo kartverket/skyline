@@ -74,11 +74,7 @@ func mapToGraphMail(email *email.SkylineEmail) (*graphusers.ItemSendMailPostRequ
 		contentType := graphmodels.TEXT_BODYTYPE
 		body.SetContentType(&contentType)
 		body.SetContent(&email.Text)
-	} else if email.IsHTML() {
-		contentType := graphmodels.HTML_BODYTYPE
-		body.SetContentType(&contentType)
-		body.SetContent(&email.HTML)
-	} else if email.IsMultiPartAlternative() {
+	} else if email.IsHTML() || email.IsMultiPartAlternative() {
 		contentType := graphmodels.HTML_BODYTYPE
 		body.SetContentType(&contentType)
 		body.SetContent(&email.HTML)
