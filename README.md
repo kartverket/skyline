@@ -42,3 +42,22 @@ All configuration properties can be specified as environment variables by replac
 
 Use `go run`, `go build && ./skyline` or use one of the [prebuilt container images](https://github.com/kartverket/skyline/pkgs/container/skyline).
 You can also create your own local image with `goreleaser release --snapshot --clean`
+
+## Testing with Grafana Oncall
+``` 
+1. create file with envs local_testing/.env.skyline
+    SL_BASIC_AUTH_CONFIG_ENABLED=TRUE
+    SL_BASIC_AUTH_CONFIG_USERNAME=test
+    SL_BASIC_AUTH_CONFIG_PASSWORD=test
+    SL_MS_GRAPH_CONFIG_TENANT_ID=
+    SL_MS_GRAPH_CONFIG_CLIENT_ID=
+    SL_MS_GRAPH_CONFIG_CLIENT_SECRET=
+    SL_MS_GRAPH_CONFIG_SENDER_USER_ID=
+2. docker compose up -d
+3. go to grafana at http://localhost:3000, user:pass admin:admin
+4. enable oncall plugin: Administration -> Plugins -> Search for oncall -> Oncall backend url: http://engine:8080
+5. edit oncall settings to use skyline. Host: Skyline, TLS: Off
+```
+
+### rebuild skyline container
+`docker compose up --build skyline`

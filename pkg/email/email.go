@@ -26,3 +26,7 @@ func (s *SkylineEmail) IsHTML() bool {
 func (s *SkylineEmail) IsPlaintext() bool {
 	return s.Headers.ContentType.ContentType == "text/plain"
 }
+
+func (s *SkylineEmail) IsMultiPartAlternative() bool {
+	return s.Headers.ContentType.ContentType == "multipart/alternative"
+}

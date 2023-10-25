@@ -53,6 +53,7 @@ func initConfig() {
 	cobra.CheckErr(err)
 	viper.AddConfigPath(home)
 	viper.AddConfigPath("/opt/skyline")
+	viper.AddConfigPath(".")
 	viper.SetConfigType("yaml")
 	viper.SetConfigName(".skyline")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
