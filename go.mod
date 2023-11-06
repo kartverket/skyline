@@ -6,7 +6,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.4.0
 	github.com/emersion/go-smtp v0.18.1
 	github.com/google/uuid v1.4.0
-	github.com/microsoftgraph/msgraph-sdk-go v1.23.0
+	github.com/microsoftgraph/msgraph-sdk-go v1.24.0
 	github.com/mnako/letters v0.2.2
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.17.0
