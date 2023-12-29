@@ -14,7 +14,7 @@ type Session struct {
 	auth                bool
 	ctx                 context.Context
 	log                 *slog.Logger
-	sender              *sender.Sender
+	sender              sender.Sender
 	validateCredentials func(string, string) bool
 }
 
@@ -61,7 +61,7 @@ func (s *Session) Data(r io.Reader) error {
 	emailsProcessed.Inc()
 	s.log.Debug("received and parsed email", "mail", msg)
 
-	err = (*s.sender).Send(s.ctx, msg)
+	err = (s.sender).Send(s.ctx, msg)
 	if err != nil {
 		s.log.Warn("could not send email", "error", err)
 		emailsFailed.Inc()
