@@ -12,14 +12,14 @@ import (
 
 // The Backend implements SMTP server methods.
 type Backend struct {
-	sender    *skysender.Sender
-	basicAuth *config.BasicAuthConfig
+	Sender    skysender.Sender
+	BasicAuth *config.BasicAuthConfig
 }
 
 func NewBackend(cfg *config.SkylineConfig) *Backend {
 	return &Backend{
-		sender:    createSender(cfg),
-		basicAuth: cfg.BasicAuthConfig,
+		Sender:    createSender(cfg),
+		BasicAuth: cfg.BasicAuthConfig,
 	}
 }
 
@@ -32,21 +32,21 @@ func (b *Backend) NewSession(_ *smtp.Conn) (smtp.Session, error) {
 	return &Session{
 		ctx:                 ctx,
 		log:                 logger,
-		sender:              b.sender,
+		sender:              b.Sender,
 		validateCredentials: b.checkCredentials,
 	}, nil
 }
 
 func (b *Backend) checkCredentials(username string, password string) bool {
-	if !b.basicAuth.Enabled {
+	if !b.BasicAuth.Enabled {
 		slog.Warn("basic auth disabled, but validation called anyway")
 		return true
 	}
 
-	return username == b.basicAuth.Username && password == b.basicAuth.Password
+	return username == b.BasicAuth.Username && password == b.BasicAuth.Password
 }
 
-func createSender(cfg *config.SkylineConfig) *skysender.Sender {
+func createSender(cfg *config.SkylineConfig) skysender.Sender {
 	var configuredSender skysender.Sender
 
 	switch cfg.SenderType {
@@ -70,5 +70,5 @@ func createSender(cfg *config.SkylineConfig) *skysender.Sender {
 		os.Exit(1)
 	}
 
-	return &configuredSender
+	return configuredSender
 }

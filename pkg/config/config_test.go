@@ -1,21 +1,20 @@
 package config
 
 import (
-	"github.com/stretchr/testify/assert"
-	"testing"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 )
 
-func TestSenderType_IsValid(t *testing.T) {
-	var tests = []struct {
-		name  string
-		input SenderType
-		want  bool
-	}{
-		{"msgraph should be valid", 0, true},
-		{"Dummy should be valid", 1, true},
-		{"random should be invalid", 2, false},
-	}
-	for _, tt := range tests {
-		assert.Equal(t, SenderType.IsValid(tt.input), tt.want, tt.name)
-	}
-}
+var _ = Describe("Config", func() {
+	Context("Sender type is valid", func() {
+		It("msgraph should return true", func() {
+			Expect(SenderType.IsValid(MsGraph)).To(BeTrue())
+		})
+		It("dummy should return true", func() {
+			Expect(SenderType.IsValid(Dummy)).To(BeTrue())
+		})
+		It("other should return false", func() {
+			Expect(SenderType.IsValid(2)).ToNot(BeTrue())
+		})
+	})
+})
