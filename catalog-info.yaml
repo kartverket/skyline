@@ -3,6 +3,8 @@ kind: Component
 metadata:
   name: skyline
   description: Enables basic auth smtp with ms graph
+  annotations:
+    backstage.io/linguist: https://github.com/kartverket/skyline
 spec:
   type: service
   lifecycle: production
