@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.4.0
-	github.com/emersion/go-smtp v0.20.0
+	github.com/emersion/go-smtp v0.20.1
 	github.com/google/uuid v1.5.0
 	github.com/microsoftgraph/msgraph-sdk-go v1.29.0
 	github.com/mnako/letters v0.2.2
