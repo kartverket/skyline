@@ -1,12 +1,11 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: skyline
-  description: Enables basic auth smtp with ms graph
+  name: "tester"
+  description: 
   annotations:
-    backstage.io/linguist: https://github.com/kartverket/skyline
+    backstage.io/linguist: 
 spec:
   type: service
   lifecycle: production
-  owner: SKIP
-  system: SKIP
+  owner: 
