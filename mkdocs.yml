@@ -1,0 +1,11 @@
+site_name: skyline
+site_description: Documentation for skyline
+repo_url: https://github.com/kartverket/skyline
+edit_uri: edit/main/docs
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Index:
+    - 'index.md'
