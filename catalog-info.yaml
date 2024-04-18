@@ -1,12 +1,37 @@
-apiVersion: backstage.io/v1alpha1
-kind: Component
+# nonk8s
+apiVersion: "backstage.io/v1alpha1"
+kind: "Component"
 metadata:
-  name: skyline
-  description: Enables basic auth smtp with ms graph
-  annotations:
-    backstage.io/linguist: https://github.com/kartverket/skyline
+  name: "skyline"
+  tags:
+  - "internal"
 spec:
-  type: service
-  lifecycle: production
-  owner: SKIP
-  system: SKIP
+  type: "service"
+  lifecycle: "production"
+  owner: "skip"
+---
+apiVersion: "backstage.io/v1alpha1"
+kind: "Group"
+metadata:
+  name: "security_champion_skyline"
+  title: "Security Champion skyline"
+spec:
+  type: "security_champion"
+  parent: "it_security_champions"
+  members:
+  - "omaen"
+  children:
+  - "resource:skyline"
+---
+apiVersion: "backstage.io/v1alpha1"
+kind: "Resource"
+metadata:
+  name: "skyline"
+  links:
+  - url: "https://github.com/kartverket/skyline"
+    title: "skyline på GitHub"
+spec:
+  type: "repo"
+  owner: "security_champion_skyline"
+  dependencyOf:
+  - "component:skyline"
