@@ -30,20 +30,11 @@ func (b *Backend) NewSession(_ *smtp.Conn) (smtp.Session, error) {
 	logger := slog.Default().With("trace-id", u.String())
 
 	return &Session{
-		ctx:                 ctx,
-		log:                 logger,
-		sender:              b.Sender,
-		validateCredentials: b.checkCredentials,
+		ctx:       ctx,
+		log:       logger,
+		sender:    b.Sender,
+		basicAuth: b.BasicAuth,
 	}, nil
-}
-
-func (b *Backend) checkCredentials(username string, password string) bool {
-	if !b.BasicAuth.Enabled {
-		slog.Warn("basic auth disabled, but validation called anyway")
-		return true
-	}
-
-	return username == b.BasicAuth.Username && password == b.BasicAuth.Password
 }
 
 func createSender(cfg *config.SkylineConfig) skysender.Sender {

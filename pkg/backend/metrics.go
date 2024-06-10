@@ -26,6 +26,11 @@ var (
 		Help: "The total number of SMTP authentication failures",
 	})
 
+	authenticationSuccesses = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "authentication_ok_total",
+		Help: "The total number of successful SMTP authentications",
+	})
+
 	emailParseFailures = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "email_parse_failures_total",
 		Help: "The total number of unparseable emails",

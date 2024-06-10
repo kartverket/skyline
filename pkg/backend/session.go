@@ -2,7 +2,10 @@ package backend
 
 import (
 	"context"
+	"fmt"
+	"github.com/emersion/go-sasl"
 	"github.com/emersion/go-smtp"
+	"github.com/kartverket/skyline/pkg/config"
 	"github.com/kartverket/skyline/pkg/email"
 	"github.com/kartverket/skyline/pkg/sender"
 	"io"
@@ -11,21 +14,45 @@ import (
 
 // A Session is returned after EHLO.
 type Session struct {
-	auth                bool
-	ctx                 context.Context
-	log                 *slog.Logger
-	sender              sender.Sender
-	validateCredentials func(string, string) bool
+	auth      bool
+	ctx       context.Context
+	log       *slog.Logger
+	sender    sender.Sender
+	basicAuth *config.BasicAuthConfig
 }
 
-func (s *Session) AuthPlain(username, password string) error {
-	if !s.validateCredentials(username, password) {
-		authenticationFailures.Inc()
-		s.log.Debug("Session authentication failed")
-		return smtp.ErrAuthFailed
+func (s *Session) AuthMechanisms() []string {
+	if s.basicAuth.Enabled {
+		return []string{sasl.Plain}
 	}
-	s.auth = true
-	return nil
+
+	return []string{sasl.Anonymous}
+}
+
+func (s *Session) Auth(_ string) (sasl.Server, error) {
+	if s.basicAuth.Enabled {
+		return sasl.NewPlainServer(func(identity, username, password string) error {
+			if len(identity) > 0 {
+				s.log.Warn("user supplied identity but we don't support them", "identity", identity)
+			}
+
+			if !(username == s.basicAuth.Username && password == s.basicAuth.Password) {
+				authenticationFailures.Inc()
+				return fmt.Errorf("the password or the supplied username is incorrect")
+				s.log.Warn("authentication failed", "username", username)
+			}
+
+			authenticationSuccesses.Inc()
+			s.auth = true
+			return nil
+		}), nil
+	}
+
+	// No auth
+	return sasl.NewAnonymousServer(func(trace string) error {
+		s.log.Info("anonymous authentication", "trace", trace)
+		return nil
+	}), nil
 }
 
 func (s *Session) Mail(from string, opts *smtp.MailOptions) error {
