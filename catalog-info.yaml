@@ -9,6 +9,7 @@ spec:
   type: "service"
   lifecycle: "production"
   owner: "skip"
+  system: "skip"
 ---
 apiVersion: "backstage.io/v1alpha1"
 kind: "Group"
