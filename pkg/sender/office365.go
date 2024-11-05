@@ -49,9 +49,9 @@ func (s *office365sender) Send(ctx context.Context, email *email.SkylineEmail) e
 	return unwrapODataError(err)
 }
 
-func mapToGraphMail(email *email.SkylineEmail) (*graphusers.ItemSendmailSendMailPostRequestBody, error) {
+func mapToGraphMail(email *email.SkylineEmail) (*graphusers.ItemSendMailPostRequestBody, error) {
 	// Outer payload
-	requestBody := graphusers.NewItemSendmailSendMailPostRequestBody()
+	requestBody := graphusers.NewItemSendMailPostRequestBody()
 	message := graphmodels.NewMessage()
 
 	// Subject
