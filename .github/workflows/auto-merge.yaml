@@ -7,4 +7,4 @@ jobs:
       id-token: write
       contents: write
       pull-requests: write
-    uses: kartverket/github-workflows/.github/workflows/auto-merge-dependabot.yml@ecd17c5857e613a088b1794b9c0d5792f2722364
+    uses: kartverket/github-workflows/.github/workflows/auto-merge-dependabot.yml@0446d326a915632ed16140a483dfefcac4158b40
