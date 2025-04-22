@@ -12,7 +12,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.36.3
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.21.1
+	github.com/prometheus/client_golang v1.22.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 )
@@ -33,7 +33,6 @@ require (
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/microsoft/kiota-abstractions-go v1.9.2 // indirect
 	github.com/microsoft/kiota-authentication-azure-go v1.3.0 // indirect
