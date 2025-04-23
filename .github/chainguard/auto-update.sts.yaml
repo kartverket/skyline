@@ -4,3 +4,5 @@ subject: repo:kartverket/skyline:pull_request
 permissions:
   contents: write
   pull_requests: write
+  actions: read
+  checks: read
