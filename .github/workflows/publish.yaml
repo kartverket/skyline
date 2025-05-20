@@ -50,6 +50,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Run Pharos"
-        uses: kartverket/pharos@v0.3.1
+        uses: kartverket/pharos@v0.3.2
         with:
           image_url: ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{  github.ref_name }}
