@@ -7,7 +7,7 @@ require (
 	github.com/emersion/go-sasl v0.0.0-20241020182733-b788ff22d5a6
 	github.com/emersion/go-smtp v0.23.0
 	github.com/google/uuid v1.6.0
-	github.com/microsoftgraph/msgraph-sdk-go v1.79.0
+	github.com/microsoftgraph/msgraph-sdk-go v1.80.0
 	github.com/mnako/letters v0.2.5
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.37.0
@@ -34,7 +34,7 @@ require (
 	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
-	github.com/microsoft/kiota-abstractions-go v1.9.2 // indirect
+	github.com/microsoft/kiota-abstractions-go v1.9.3 // indirect
 	github.com/microsoft/kiota-authentication-azure-go v1.3.0 // indirect
 	github.com/microsoft/kiota-http-go v1.5.2 // indirect
 	github.com/microsoft/kiota-serialization-form-go v1.1.2 // indirect
