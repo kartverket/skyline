@@ -72,8 +72,8 @@ github.com/microsoftgraph/msgraph-sdk-go v1.81.0 h1:TZ+YbXGCOyRU2A5IWJLOIIKMECMy
 github.com/microsoftgraph/msgraph-sdk-go v1.81.0/go.mod h1:1V9jKcRL+Czs3u8gI2XjUn7xJCAWRKGizA7l14Bg9zQ=
 github.com/microsoftgraph/msgraph-sdk-go-core v1.3.2 h1:5jCUSosTKaINzPPQXsz7wsHWwknyBmJSu8+ZWxx3kdQ=
 github.com/microsoftgraph/msgraph-sdk-go-core v1.3.2/go.mod h1:iD75MK3LX8EuwjDYCmh0hkojKXK6VKME33u4daCo3cE=
-github.com/mnako/letters v0.2.5 h1:zMuyY7cnytkLVJK1TM6AEvgAoVxSKyc1ZOU4Qu1NrFA=
-github.com/mnako/letters v0.2.5/go.mod h1:0gm/Bmk4B5g0iEE7BNxFevMs8qqdF6Gbh050JEM7L24=
+github.com/mnako/letters v0.2.6 h1:r6YSNUupRjuiZHKdINxge5eYOaUnxiq+LzcaBa2zk0c=
+github.com/mnako/letters v0.2.6/go.mod h1:0gm/Bmk4B5g0iEE7BNxFevMs8qqdF6Gbh050JEM7L24=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
 github.com/onsi/ginkgo/v2 v2.23.4 h1:ktYTpKJAVZnDT4VjxSbiBenUjmlL/5QkBEocaWXiQus=
