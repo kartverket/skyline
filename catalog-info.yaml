@@ -7,5 +7,5 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: skip
-  system: skip
+  owner: skoop
+  system: skoop
