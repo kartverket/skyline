@@ -1,38 +1,11 @@
-# nonk8s
-apiVersion: "backstage.io/v1alpha1"
-kind: "Component"
+apiVersion: backstage.io/v1alpha1
+kind: Component
 metadata:
-  name: "skyline"
+  name: skyline
   tags:
-  - "internal"
+    - internal
 spec:
-  type: "service"
-  lifecycle: "production"
-  owner: "skip"
-  system: "skip"
----
-apiVersion: "backstage.io/v1alpha1"
-kind: "Group"
-metadata:
-  name: "security_champion_skyline"
-  title: "Security Champion skyline"
-spec:
-  type: "security_champion"
-  parent: "it_security_champions"
-  members:
-  - "omaen"
-  children:
-  - "resource:skyline"
----
-apiVersion: "backstage.io/v1alpha1"
-kind: "Resource"
-metadata:
-  name: "skyline"
-  links:
-  - url: "https://github.com/kartverket/skyline"
-    title: "skyline på GitHub"
-spec:
-  type: "repo"
-  owner: "security_champion_skyline"
-  dependencyOf:
-  - "component:skyline"
+  type: service
+  lifecycle: production
+  owner: skoop
+  system: skoop
