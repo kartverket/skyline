@@ -8,7 +8,7 @@ require (
 	github.com/emersion/go-smtp v0.25.1
 	github.com/google/uuid v1.6.0
 	github.com/microsoftgraph/msgraph-sdk-go v1.105.0
-	github.com/mnako/letters v0.4.0
+	github.com/mnako/letters v0.4.1
 	github.com/onsi/ginkgo/v2 v2.34.0
 	github.com/onsi/gomega v1.44.0
 	github.com/pkg/errors v0.9.1
