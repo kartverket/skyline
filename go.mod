@@ -7,7 +7,7 @@ require (
 	github.com/emersion/go-sasl v0.0.0-20241020182733-b788ff22d5a6
 	github.com/emersion/go-smtp v0.25.1
 	github.com/google/uuid v1.6.0
-	github.com/microsoftgraph/msgraph-sdk-go v1.105.0
+	github.com/microsoftgraph/msgraph-sdk-go v1.106.0
 	github.com/mnako/letters v0.4.1
 	github.com/onsi/ginkgo/v2 v2.34.0
 	github.com/onsi/gomega v1.44.0
