@@ -1,4 +1,4 @@
-FROM golang:1.27 AS builder
+FROM golang:1.27.4 AS builder
 RUN adduser -u 10001 scratchuser
 
 FROM scratch
